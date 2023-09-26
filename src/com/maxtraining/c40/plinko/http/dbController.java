@@ -4,6 +4,7 @@ import java.awt.image.RescaleOp;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
+import java.net.http.HttpRequest.BodyPublishers;
 import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 
@@ -77,6 +78,54 @@ public class dbController {
 		User user = mapper.readValue(jsonData, User.class);
 		System.out.println("Logged in!");
 		return user;
+	}
+	public User addNewUser() throws IOException, InterruptedException {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Please enter a new username:");
+		String username = scan.nextLine();
+		System.out.println("Please enter a new password:");
+		String password = scan.nextLine();
+		User user = new User(0, username, password, 1000);
+		String jsondata ="";
+			try {
+				jsondata = mapper.writeValueAsString(user);
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		System.out.print(jsondata);
+		HttpRequest req = HttpRequest.newBuilder(URI.create(baseURL+"/api/users")).header("Content-Type", "application/json").POST(BodyPublishers.ofString(jsondata)).build();
+			HttpResponse<String> res = client.send(req, HttpResponse.BodyHandlers.ofString());
+			System.out.println(res.statusCode());
+		if (res.statusCode() != 201) {
+			System.out.println("Usercreation failed!");
+			return user;
+		}
+		return user;
+	}
+	public void updateDb(User user) {
+		String jsondata = "";
+		try {
+			jsondata = mapper.writeValueAsString(user);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		HttpRequest req = HttpRequest.newBuilder(URI.create(baseURL+"/api/users/"+user.id)).header("Content-Type", "application/json").PUT(BodyPublishers.ofString(jsondata)).build();
+			HttpResponse<String> res = null;
+			try {
+				res = client.send(req, HttpResponse.BodyHandlers.ofString());
+			} catch (IOException | InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		if (res.statusCode() != 200) {
+			System.out.println("update failed SC: " + res.statusCode());
+			return;
+		}
+		System.out.println("Updated sucess SC: " + res.statusCode());
+		return;
 	}
 
 
