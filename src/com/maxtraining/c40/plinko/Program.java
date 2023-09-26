@@ -1,11 +1,22 @@
 package com.maxtraining.c40.plinko;
 import java.util.Scanner;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.maxtraining.c40.plinko.board.Board;
+import com.maxtraining.c40.plinko.board.Obj;
+import com.maxtraining.c40.plinko.http.dbController;
+import com.maxtraining.c40.plinko.user.User;
 
 public class Program {
 
 	public static void main(String[] args) {
+
+		User user = new User();
+		dbController cont = new dbController();
+
 		boolean outerActive = true;
 		boolean innerActive = false;
 		boolean gameActive = true;
