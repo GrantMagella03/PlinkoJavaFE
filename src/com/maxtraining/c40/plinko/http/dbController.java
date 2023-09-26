@@ -38,10 +38,8 @@ public class dbController {
 		try {
 			res = client.send(req, HttpResponse.BodyHandlers.ofString());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println(res.statusCode());
@@ -57,15 +55,14 @@ public class dbController {
 		String username = scan.nextLine();
 		System.out.println("Please enter your password");
 		String password = scan.nextLine();
+		scan.close();
 		HttpRequest req = HttpRequest.newBuilder().uri(URI.create(baseURL+"/api/users/"+username+"/"+password)).GET().build();
 		HttpResponse<String> res = null;
 		try {
 			res = client.send(req, HttpResponse.BodyHandlers.ofString());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (res.statusCode() != 200) {
@@ -86,11 +83,11 @@ public class dbController {
 		System.out.println("Please enter a new password:");
 		String password = scan.nextLine();
 		User user = new User(0, username, password, 1000);
+		scan.close();
 		String jsondata ="";
 			try {
 				jsondata = mapper.writeValueAsString(user);
 			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		System.out.print(jsondata);
@@ -108,7 +105,6 @@ public class dbController {
 		try {
 			jsondata = mapper.writeValueAsString(user);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		HttpRequest req = HttpRequest.newBuilder(URI.create(baseURL+"/api/users/"+user.id)).header("Content-Type", "application/json").PUT(BodyPublishers.ofString(jsondata)).build();
@@ -116,7 +112,6 @@ public class dbController {
 			try {
 				res = client.send(req, HttpResponse.BodyHandlers.ofString());
 			} catch (IOException | InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

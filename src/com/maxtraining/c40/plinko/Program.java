@@ -14,15 +14,25 @@ public class Program {
 
 	public static void main(String[] args) {
 
-		User user = new User();
 		dbController cont = new dbController();
-
 		boolean outerActive = true;
 		boolean innerActive = false;
 		boolean gameActive = true;
 		while(outerActive){//user login stage
 			Scanner s = new Scanner(System.in);
-			innerActive = Login();
+		User user = new User();
+		try {
+			user = cont.signIn();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		if (user != null) {
+			innerActive = true;
+		}
+
+			//innerActive = Login();
 			while (innerActive) {//game input instance
 				Board B = new Board();
 				B.GenerateBase();
@@ -30,7 +40,6 @@ public class Program {
 				int Nballs = s.nextInt();
 				System.out.println("Enter Bet Value:");
 				double INPUTBET = s.nextDouble();
-				//TODO this should subtract INPUTBALANCE from user balance in DB
 				//System.out.println(INPUTBET);
 				B.display();
 				for(int Z = Nballs; Z>0;Z--) {//Inserts 1 ball then advances game one tick
@@ -53,8 +62,6 @@ public class Program {
 	}
 
 	private static boolean Login() {
-		//TODO hook login method to DB
-		//return true for testing purposes
 		return true;
 	}
 
