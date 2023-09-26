@@ -11,6 +11,13 @@ public class User {
 		this.username = username;
 		this.password = password;
 	}
+	public User(int id, String username, String password, double score) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.score = score;
+	}
 	public int getId() {
 		return id;
 	}
