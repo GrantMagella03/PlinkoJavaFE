@@ -1,22 +1,31 @@
 package com.maxtraining.c40.plinko;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.maxtraining.c40.plinko.board.Board;
 import com.maxtraining.c40.plinko.board.Obj;
+import com.maxtraining.c40.plinko.http.dbController;
+import com.maxtraining.c40.plinko.user.User;
 
 public class Program {
 
 	public static void main(String[] args) {
-		Board board1 = new Board();
-		board1.GenerateBase();
-		Obj[][] B = board1.getB();
-		B[5][0] = new Obj("O", 0);
-		board1.setB(B);
-		board1.display();
-		board1.BallUpdate();
-		board1.display();
-		board1.BallUpdate();
-		board1.display();
-		board1.BallUpdate();
+		User user = new User();
+		dbController cont = new dbController();
+		
+		cont.getHighScore();
+		try {
+			user = cont.signIn();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		int i = 1;
+		
 	}
 
 }

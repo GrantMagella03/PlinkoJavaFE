@@ -4,10 +4,14 @@ import java.awt.image.RescaleOp;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
+import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.*;
+
+
 
 import com.maxtraining.c40.plinko.user.User;
 
@@ -45,13 +49,14 @@ public class dbController {
 		double score = Double.parseDouble(scoreStr);
 		return score;
 	}
-	
+
 	public User signIn() throws JsonMappingException, JsonProcessingException {
+		Scanner scan = new Scanner(System.in);
 		System.out.println("Please enter your username:");
-		String username = System.console().readLine();
+		String username = scan.nextLine();
 		System.out.println("Please enter your password");
-		String password = System.console().readLine();
-		HttpRequest req = HttpRequest.newBuilder().uri(URI.create(baseURL+"/api/"+username+"/"+password)).GET().build();
+		String password = scan.nextLine();
+		HttpRequest req = HttpRequest.newBuilder().uri(URI.create(baseURL+"/api/users/"+username+"/"+password)).GET().build();
 		HttpResponse<String> res = null;
 		try {
 			res = client.send(req, HttpResponse.BodyHandlers.ofString());
@@ -62,8 +67,15 @@ public class dbController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String jsonData = res.toString();
+		if (res.statusCode() != 200) {
+			User user = new User();
+			user = null;
+			System.out.println("Logon Failed!");
+			return user;
+		}
+		String jsonData = res.body().toString();
 		User user = mapper.readValue(jsonData, User.class);
+		System.out.println("Logged in!");
 		return user;
 	}
 
