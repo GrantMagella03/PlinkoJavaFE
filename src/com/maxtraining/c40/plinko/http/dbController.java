@@ -49,13 +49,11 @@ public class dbController {
 		return score;
 	}
 
-	public User signIn() throws JsonMappingException, JsonProcessingException {
-		Scanner scan = new Scanner(System.in);
+	public User signIn(Scanner scan) {
 		System.out.println("Please enter your username:");
 		String username = scan.nextLine();
 		System.out.println("Please enter your password");
 		String password = scan.nextLine();
-		scan.close();
 		HttpRequest req = HttpRequest.newBuilder().uri(URI.create(baseURL+"/api/users/"+username+"/"+password)).GET().build();
 		HttpResponse<String> res = null;
 		try {
@@ -65,25 +63,30 @@ public class dbController {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		User user = new User();
+		user = null;
 		if (res.statusCode() != 200) {
-			User user = new User();
-			user = null;
 			System.out.println("Logon Failed!");
 			return user;
 		}
 		String jsonData = res.body().toString();
-		User user = mapper.readValue(jsonData, User.class);
+		try {
+			user = mapper.readValue(jsonData, User.class);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("Logged in!");
 		return user;
 	}
-	public User addNewUser() throws IOException, InterruptedException {
-		Scanner scan = new Scanner(System.in);
+	public User addNewUser(Scanner scan) throws IOException, InterruptedException {
+		
 		System.out.println("Please enter a new username:");
 		String username = scan.nextLine();
 		System.out.println("Please enter a new password:");
 		String password = scan.nextLine();
 		User user = new User(0, username, password, 1000);
-		scan.close();
+	
 		String jsondata ="";
 			try {
 				jsondata = mapper.writeValueAsString(user);
