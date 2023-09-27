@@ -1,12 +1,7 @@
 package com.maxtraining.c40.plinko;
 import java.util.Scanner;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.maxtraining.c40.plinko.board.Board;
-import com.maxtraining.c40.plinko.board.Obj;
 import com.maxtraining.c40.plinko.http.dbController;
 import com.maxtraining.c40.plinko.user.User;
 
@@ -45,7 +40,7 @@ public class Program {
 			innerActive = true;
 		}
 
-			//innerActive = Login();
+			
 			while (innerActive) {//game input instance
 				Board B = new Board();
 				B.GenerateBase();
@@ -57,31 +52,32 @@ public class Program {
 					System.out.println("Your balance is "+user.getScore());
 					System.out.println("Enter Bet Value:");
 					INPUTBET = s.nextDouble();
-					if (INPUTBET <= user.getScore()) {
+					if (INPUTBET <= user.getScore() && INPUTBET >= 0) {
 					validBet = true;
 					}
 					else {
 						System.out.println("Invalid bet! Bet cannot be more than your balance!");
 					}
 				}
+				double oldScore = user.getScore();
 				user.setScore(user.getScore() - INPUTBET);
-				//System.out.println(INPUTBET);
 				
 				//main game loop
 				B.display(0);
 				for(int Z = Nballs; Z>0;Z--) {//Inserts 1 ball then advances game two ticks
 					B.inPutBall(INPUTBET/Nballs);
 					B.BallLogic(user);
-					//B.display();
+					
 					B.BallLogic(user);// a forced second tick here fixes ball "bounce issue"
-					//B.display();
+					
 					gameActive=true;
 				}
 				while(gameActive) {//finishes started game
 					gameActive = B.isValidPos();
 					B.BallLogic(user);
-					//B.display();
+					
 				}
+				user.scoreDif(oldScore);
 			}
 		}
 		s.close();

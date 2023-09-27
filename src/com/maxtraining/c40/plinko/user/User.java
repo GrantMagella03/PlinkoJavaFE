@@ -18,6 +18,17 @@ public class User {
 		this.password = password;
 		this.score = score;
 	}
+	public void scoreDif(double oldScore) {
+		double scoreDiff;
+		if (oldScore > this.score) {
+			scoreDiff = oldScore - this.score;
+			System.out.println("You lost " + scoreDiff);
+		}
+		else {
+			scoreDiff = this.score - oldScore;
+			System.out.println("You won " + scoreDiff);
+		}
+	}
 	public int getId() {
 		return id;
 	}
