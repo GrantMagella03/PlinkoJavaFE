@@ -50,13 +50,14 @@ public class dbController {
 	}
 
 	public User signIn(Scanner scan)  {
-
+		// handles usersignin
 		System.out.println("Please enter your username:");
 		String username = scan.nextLine();
 		System.out.println("Please enter your password");
 		String password = scan.nextLine();
 
 		HttpRequest req = HttpRequest.newBuilder().uri(URI.create(baseURL+"/api/users/"+username+"/"+password)).GET().build();
+		//Makes calls to the API database
 		HttpResponse<String> res = null;
 		try {
 			res = client.send(req, HttpResponse.BodyHandlers.ofString());
@@ -65,13 +66,16 @@ public class dbController {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
 		User user = new User();
+		// if the statuscode is not OK 200 logon has failed and user will need to try again.
 		if (res.statusCode() != 200) {
 			user = null;
-			System.out.println("Logon Failed!");
+			System.out.println("Logon Failed! SC: " + res.statusCode());
 			return user;
 		}
 		String jsonData = res.body().toString();
+		// code that converts the JSON data from the db call and converts it into an instance of a user object
 		try {
 			user = mapper.readValue(jsonData, User.class);
 		} catch (JsonProcessingException e) {
@@ -82,7 +86,7 @@ public class dbController {
 		return user;
 	}
 	public User addNewUser(Scanner scan) throws IOException, InterruptedException {
-	
+		// Will create a new user and set their balance to 1000 to start.
 		System.out.println("Please enter a new username:");
 		String username = scan.nextLine();
 		System.out.println("Please enter a new password:");
@@ -96,6 +100,8 @@ public class dbController {
 				e.printStackTrace();
 			}
 		System.out.print(jsondata);
+		//Makes the calls to the db to create a new user, converting the properties of the instance user
+		// and converting it to JSON DATA that is readable to the db.
 		HttpRequest req = HttpRequest.newBuilder(URI.create(baseURL+"/api/users")).header("Content-Type", "application/json").POST(BodyPublishers.ofString(jsondata)).build();
 			HttpResponse<String> res = client.send(req, HttpResponse.BodyHandlers.ofString());
 			System.out.println(res.statusCode());
@@ -103,9 +109,27 @@ public class dbController {
 			System.out.println("Usercreation failed!");
 			return user;
 		}
+		req = HttpRequest.newBuilder().uri(URI.create(baseURL+"/api/users/"+username+"/"+password)).GET().build();
+		//Makes calls to the API database
+		try {
+			res = client.send(req, HttpResponse.BodyHandlers.ofString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		String jsonData = res.body().toString();
+		// code that converts the JSON data from the db call and converts it into an instance of a user object
+		try {
+			user = mapper.readValue(jsonData, User.class);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return user;
 	}
 	public void updateDb(User user) {
+		// General method to be called when the db needs to be updated with highscore etc
 		String jsondata = "";
 		try {
 			jsondata = mapper.writeValueAsString(user);
@@ -124,7 +148,7 @@ public class dbController {
 			System.out.println("update failed SC: " + res.statusCode());
 			return;
 		}
-		System.out.println("Updated sucess SC: " + res.statusCode());
+		//System.out.println("Updated sucess SC: " + res.statusCode());
 		return;
 	}
 
