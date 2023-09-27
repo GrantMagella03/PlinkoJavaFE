@@ -13,21 +13,16 @@ import com.maxtraining.c40.plinko.user.User;
 public class Program {
 
 	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
 
 		dbController cont = new dbController();
 		boolean outerActive = true;
 		boolean innerActive = false;
 		boolean gameActive = true;
 		while(outerActive){//user login stage
-			Scanner s = new Scanner(System.in);
 		User user = new User();
-		try {
 			user = cont.signIn(s);
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
+
 		if (user != null) {
 			innerActive = true;
 		}
@@ -56,13 +51,7 @@ public class Program {
 					B.display();
 				}
 			}
-			
-			s.close();
 		}
+		s.close();
 	}
-
-	private static boolean Login() {
-		return true;
-	}
-
 }

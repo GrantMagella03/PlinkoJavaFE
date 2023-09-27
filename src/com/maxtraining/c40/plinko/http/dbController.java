@@ -49,7 +49,7 @@ public class dbController {
 		return score;
 	}
 
-	public User signIn(Scanner scan) throws JsonMappingException, JsonProcessingException {
+	public User signIn(Scanner scan)  {
 
 		System.out.println("Please enter your username:");
 		String username = scan.nextLine();
@@ -65,14 +65,19 @@ public class dbController {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		User user = new User();
 		if (res.statusCode() != 200) {
-			User user = new User();
 			user = null;
 			System.out.println("Logon Failed!");
 			return user;
 		}
 		String jsonData = res.body().toString();
-		User user = mapper.readValue(jsonData, User.class);
+		try {
+			user = mapper.readValue(jsonData, User.class);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.out.println("Logged in!");
 		return user;
 	}
