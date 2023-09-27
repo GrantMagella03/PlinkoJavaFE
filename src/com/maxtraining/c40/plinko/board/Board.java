@@ -129,16 +129,16 @@ public void setB(Obj[][] b) {
 	private double Cashout(double v, int x, User user) {
 		double score;
 		if (x == 0 || x == 12) {
-			score = v * .1;
+			score = v * 3;
 		}
 		else if (x == 2 || x == 10) {
-			score = v * .5;
-		}
-		else if (x == 4 || x == 8) {
 			score = v * 2;
 		}
+		else if (x == 4 || x == 8) {
+			score = v * .5;
+		}
 		else if (x == 6) {
-			score = v * 5;
+			score = v * .1;
 		}
 		else {
 			return v;
@@ -153,8 +153,8 @@ public void setB(Obj[][] b) {
 	}
 	//spawns a ball at the top of the board
 	public void inPutBall(double V) {
-		int R = (int) (Math.random()*BX);
-		B[R][0]= new Obj("O", (int)Math.random()*100, false, V, R, 0);
+		//int R = (int) (Math.random()*BX);
+		B[6][0]= new Obj("O", (int)Math.random()*100, false, V, 6, 0);
 	}
 	//returns true if there are any balls still on the board, else returns false
 	public boolean isValidPos() {
