@@ -85,7 +85,7 @@ public class dbController {
 		System.out.println("Logged in!");
 		return user;
 	}
-	public User addNewUser(Scanner scan) throws IOException, InterruptedException {
+	public User addNewUser(Scanner scan) {
 		// Will create a new user and set their balance to 1000 to start.
 		System.out.println("Please enter a new username:");
 		String username = scan.nextLine();
@@ -103,7 +103,16 @@ public class dbController {
 		//Makes the calls to the db to create a new user, converting the properties of the instance user
 		// and converting it to JSON DATA that is readable to the db.
 		HttpRequest req = HttpRequest.newBuilder(URI.create(baseURL+"/api/users")).header("Content-Type", "application/json").POST(BodyPublishers.ofString(jsondata)).build();
-			HttpResponse<String> res = client.send(req, HttpResponse.BodyHandlers.ofString());
+			HttpResponse<String> res = null;
+			try {
+				res = client.send(req, HttpResponse.BodyHandlers.ofString());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println(res.statusCode());
 		if (res.statusCode() != 201) {
 			System.out.println("Usercreation failed!");
