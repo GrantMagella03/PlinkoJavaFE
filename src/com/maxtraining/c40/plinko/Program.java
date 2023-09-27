@@ -32,8 +32,19 @@ public class Program {
 				B.GenerateBase();
 				System.out.println("Enter number of balls to insert:");
 				int Nballs = s.nextInt();
-				System.out.println("Enter Bet Value:");
-				double INPUTBET = s.nextDouble();
+				double INPUTBET = 0;
+				Boolean validBet = false;
+				while (validBet == false){
+					System.out.println("Your balance is "+user.getScore());
+					System.out.println("Enter Bet Value:");
+					INPUTBET = s.nextDouble();
+					if (INPUTBET <= user.getScore()) {
+					validBet = true;
+					}
+					else {
+						System.out.println("Invalid bet! Bet cannot be more than your balance!");
+					}
+				}
 				user.setScore(user.getScore() - INPUTBET);
 				//System.out.println(INPUTBET);
 				B.display();
