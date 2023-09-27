@@ -19,8 +19,27 @@ public class Program {
 		boolean innerActive = false;
 		boolean gameActive = true;
 		while(outerActive){//user login stage
-		User user = new User();
+		User user = null;
+		System.out.println("Welcome to Plinko!");
+		System.out.println("1. Login");
+		System.out.println("2. New User");
+		System.out.println("3. Get high score");
+		System.out.println("Please select an option: ");
+		String menuChoice = s.nextLine();
+		switch (menuChoice){
+		case("1"):
 			user = cont.signIn(s);
+		break;
+		case("2"):
+			user = cont.addNewUser(s);
+		break;
+		case("3"):
+			System.out.println("The high score is "+cont.getHighScore());
+		break;
+		default:
+			System.out.println("Please select a valid option!");
+			break;
+		}
 
 		if (user != null) {
 			innerActive = true;
