@@ -47,19 +47,21 @@ public class Program {
 				}
 				user.setScore(user.getScore() - INPUTBET);
 				//System.out.println(INPUTBET);
-				B.display();
-				for(int Z = Nballs; Z>0;Z--) {//Inserts 1 ball then advances game one tick
+				
+				//main game loop
+				B.display(0);
+				for(int Z = Nballs; Z>0;Z--) {//Inserts 1 ball then advances game two ticks
 					B.inPutBall(INPUTBET/Nballs);
 					B.BallLogic(user);
-					B.display();
-					//B.BallLogic();// a forced second tick here can fix ball "bounce issue" not needed atm though
+					//B.display();
+					B.BallLogic(user);// a forced second tick here fixes ball "bounce issue"
 					//B.display();
 					gameActive=true;
 				}
 				while(gameActive) {//finishes started game
 					gameActive = B.isValidPos();
 					B.BallLogic(user);
-					B.display();
+					//B.display();
 				}
 			}
 		}
