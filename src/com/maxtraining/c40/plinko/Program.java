@@ -22,7 +22,7 @@ public class Program {
 			Scanner s = new Scanner(System.in);
 		User user = new User();
 		try {
-			user = cont.signIn();
+			user = cont.signIn(s);
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
