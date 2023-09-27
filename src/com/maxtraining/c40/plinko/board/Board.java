@@ -1,5 +1,8 @@
 package com.maxtraining.c40.plinko.board;
 
+import com.maxtraining.c40.plinko.http.dbController;
+import com.maxtraining.c40.plinko.user.User;
+
 public class Board {
 public int BY = 7;
 public int BX = 13;
@@ -40,7 +43,7 @@ public void setB(Obj[][] b) {
 		}
 	}
 	//moves the ball through the board dependent on the object at y+1 of the ball
-	public void BallLogic() {
+	public void BallLogic(User user) {
 		for(int y=0; y<BY;y++) {
 			// first loop  of x, moves ball left or right if the object at y+1 is a peg(^)
 			for(int x=0; x<BX; x++) {
@@ -76,7 +79,7 @@ public void setB(Obj[][] b) {
 					} else if(B[x][y+1].getType()=="U") {
 						double V = B[x][y].getValue();
 						B[x][y]=new Obj("^", -1);
-						Cashout(V,x);
+						Cashout(V,x, user);
 						//TODO add visual clarity to what pocket a ball enters
 					}
 				}
@@ -110,9 +113,27 @@ public void setB(Obj[][] b) {
 	}
 
 	//updates user balance based on x pos and value of the ball
-	private void Cashout(double v, int x) {
+	private void Cashout(double v, int x, User user) {
 		//TODO Implement api calls from here to update user balance
-		
+		double score;
+		if (x == 0 || x == 12) {
+			score = v * .1;
+		}
+		else if (x == 2 || x == 10) {
+			score = v * .5;
+		}
+		else if (x == 4 || x == 8) {
+			score = v * 2;
+		}
+		else if (x == 6) {
+			score = v * 5;
+		}
+		else {
+			return;
+		}
+		user.setScore(user.getScore() + score);
+		dbController cont = new dbController();
+		cont.updateDb(user);
 	}
 	//spawns a ball at the top of the board
 	public void inPutBall(double V) {

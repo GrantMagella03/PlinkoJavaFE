@@ -11,7 +11,6 @@ import com.maxtraining.c40.plinko.http.dbController;
 import com.maxtraining.c40.plinko.user.User;
 
 public class Program {
-
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 
@@ -35,11 +34,12 @@ public class Program {
 				int Nballs = s.nextInt();
 				System.out.println("Enter Bet Value:");
 				double INPUTBET = s.nextDouble();
+				user.setScore(user.getScore() - INPUTBET);
 				//System.out.println(INPUTBET);
 				B.display();
 				for(int Z = Nballs; Z>0;Z--) {//Inserts 1 ball then advances game one tick
 					B.inPutBall(INPUTBET/Nballs);
-					B.BallLogic();
+					B.BallLogic(user);
 					B.display();
 					//B.BallLogic();// a forced second tick here can fix ball "bounce issue" not needed atm though
 					//B.display();
@@ -47,7 +47,7 @@ public class Program {
 				}
 				while(gameActive) {//finishes started game
 					gameActive = B.isValidPos();
-					B.BallLogic();
+					B.BallLogic(user);
 					B.display();
 				}
 			}
