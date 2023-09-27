@@ -1,19 +1,11 @@
 package com.maxtraining.c40.plinko.http;
-import java.awt.image.RescaleOp;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.*;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.util.Scanner;
-import java.util.concurrent.CompletableFuture;
-
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.*;
-
-
-
 import com.maxtraining.c40.plinko.user.User;
 
 
